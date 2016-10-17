@@ -58,7 +58,7 @@ class HarmonyMemory(object):
         return _r_.choice(boundaries)
     
     def get_boundaries(self, square):
-        return self.problem[square]
+        return self.problem[square] 
 
     def pitch_adjustment(self, value, boundaries):
         direction = _r_.choice([1, -1])
