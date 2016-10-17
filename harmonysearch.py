@@ -9,34 +9,35 @@ from sudoku_classes import Solution, Grid
 
 class HarmonyMemory(object):
     
-    def __init__(self, memory, memory_size):
-        self.memory = memory
+    def __init__(self, problem, memory_size):
+        self.problem = problem
         self.memory_size = memory_size
+        self.memory = [self.rand_solu(problem) for x in range(memory_size)]
+        self.memory = [(s, s.evaluate()) for s in self.memory]
+        self.update()
     
     def __repr__(self):
         return str(self.memory)
         
-    def 
+    def update(self):
+        self.memory.sort(key=lambda x: x[1])
+        self.memory = self.memory[:self.memory_size]
 
-
-def random_solutions(problem):
-    return Solution([_r_.choice(x) for x in problem])
-
-
-def create_HM(HM_size, problem):
-    HM = []
-    for i in range(HM_size):
-        h = random_harmony(problem)
-        HM.insert(i, (h, h.evaluate()))
-    HM.sort(key=lambda x: x[1])
-    return HM
+    def rand_solu(self, problem):
+        return Solution([_r_.choice(x) for x in self.problem])
+        
+    def memory_consideration(self, square):
+        return _r_.choice([h[0].numbers[square] for h in self.memory])
+        
+    
 
 
 def random_selection(boundaries):
     return _r_.choice(boundaries)
 
 
-def memory_consideration(square)
+def pitch_adjustment(square, boundaries):
+    
     
 
 
