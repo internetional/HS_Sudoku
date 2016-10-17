@@ -3,9 +3,15 @@
 import random as _r_
 from sudoku_classes import Solution, Grid
 
-
-
-
+def main(problem, iterations=5000, HMS=100, HCR=.6, PAR=.2):
+    problem = load_problem(problem)
+    grid = Grid(problem)
+    prob = grid.get_problem()
+    hm = HarmonyMemory(prob, HMS, HCR, PAR)
+    for x in range(iterations):
+        if hm.memory[0][1] == 0: break
+        hm.improvise()
+    return (x+1, hm, hm.memory[0])
 
 class HarmonyMemory(object):
     
@@ -76,3 +82,4 @@ def load_problem(problem_name="veryeasy1", heuristic=True):
             result += [int(n) for n in line.rstrip().split("\t")]
     
     return result
+
