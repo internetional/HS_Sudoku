@@ -6,7 +6,7 @@ class Grid(object):
 
     def __init__(self, numbers):
         self.numbers = numbers
-        self.locked = [n for n in range(len(self.numbers)) if self.numbers[n] != 0]
+        self.locked = [n for n in range(len(self.numbers)) if self.numbers[n] in [1,2,3,4,5,6,7,8,9]]
         
     def __repr__(self):
         return "\n".join(str(self.get_line(x)) for x in range(9))
@@ -50,7 +50,7 @@ class Grid(object):
         
     def sub_eval(self, subgrid):
         #res = sqrt((sum(subgrid) - 45)**2)
-        res = sum([1*subgrid.count(n) for n in subgrid if subgrid.count(n) > 1])
+        res = sum([subgrid.count(n) for n in subgrid if subgrid.count(n) > 1])
         return res
         
     def evaluate(self):
@@ -58,8 +58,12 @@ class Grid(object):
         
     def possibilities(self, square):
         if type(square) == tuple: square = 9*square[0]+square[1]
-        if square in self.locked: return [self.numbers[square]]
-        else: return [n for n in range(10) if n not in self.sqs_subs(square)]
+        if square in self.locked and type(self.numbers[square]) == int: return [self.numbers[square]]
+        if type(self.numbers[square]) == list:
+            if len(self.numbers[square]) == 1: return self.numbers[square]
+            return [n for n in self.numbers[square] if n not in self.sqs_subs(square)]
+        
+        return [n for n in range(10) if n not in self.sqs_subs(square)]
         
     def in_which_line(self, square):
         return int(square / 9)
@@ -73,14 +77,28 @@ class Grid(object):
         return arrow[self.in_which_line(square)][self.in_which_column(square)]
         
     def sqs_subs(self, square):
-        all_three = self.get_box(self.in_which_box(square))
-        all_three += self.get_line(self.in_which_line(square))
-        all_three += self.get_column(self.in_which_column(square))
+        if type(self.numbers[0]) != list: 
+            all_three = self.get_box(self.in_which_box(square))
+            all_three += self.get_line(self.in_which_line(square))
+            all_three += self.get_column(self.in_which_column(square))
+        else:
+            all_three = [y[0] for y in self.get_box(self.in_which_box(square)) if len(y) == 1]
+            all_three += [y[0] for y in self.get_line(self.in_which_line(square)) if len(y) == 1]
+            all_three += [y[0] for y in self.get_column(self.in_which_column(square)) if len(y) == 1]
+            
         return all_three
         
     def get_problem(self):
         return [self.possibilities(n) for n in range(81)]
         
+    def constraint_propagation(self):
+        while True:
+            before = self.numbers.copy()
+            self.numbers = self.get_problem()
+            if len([x for y in self.numbers for x in y]) == 81: break
+            if before == self.numbers: break
+        return self.numbers
+            
     
 class Solution(Grid):
 
