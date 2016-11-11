@@ -78,7 +78,10 @@ def show_board(solution, locked, score, pos=(-225, -225), size=50,
             seth(0)
             setpos((pos[0]+s/2.0*(2*dt[0]-1), pos[1]+s/2.0*(2*dt[1]-1.4)))
             index = tuples.index(dt)
-            z = solution[index][0]
+            try:
+                z = solution[index][0]
+            except:
+                z = solution[index]
             if index in locked:
                 spec = "bold"
                 pencolor("black")

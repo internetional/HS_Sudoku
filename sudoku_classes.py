@@ -49,8 +49,9 @@ class Grid(object):
         return self.get_lines() + self.get_boxes() + self.get_columns()
         
     def sub_eval(self, subgrid):
-        #res = sqrt((sum(subgrid) - 45)**2)
+        # res = sqrt((sum(subgrid) - 45)**2)
         res = sum([subgrid.count(n) for n in subgrid if subgrid.count(n) > 1])
+        # res = sum([1 for n in subgrid if subgrid.count(n) > 1])
         return res
         
     def evaluate(self):

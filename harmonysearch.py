@@ -3,10 +3,7 @@
 import random as _r_
 from sudoku_classes import Solution, Grid
 
-def main(problem, iterations=5000, HMS=100, HCR=.6, PAR=.2):
-    problem = load_problem(problem)
-    grid = Grid(problem)
-    prob = grid.get_problem()
+def harmony_search(prob, iterations=5000, HMS=100, HCR=.6, PAR=.2):
     hm = HarmonyMemory(prob, HMS, HCR, PAR)
     for x in range(iterations):
         if hm.memory[0][1] == 0: break
